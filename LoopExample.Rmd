@@ -1,0 +1,63 @@
+---
+title: "LoopExample"
+author: "AIR Participant"
+date: "5/21/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(gt)
+library(scales)
+#install these packages if they don't exist in your R Studio IDE
+
+car_loops <- gtcars[gtcars$ctry_origin == car_loop,]
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(car_loops)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+gtcars2 <- gtcars %>%
+  dplyr::filter(ctry_origin == car_loop)
+
+
+ggplot(gtcars2, aes(x = model, y = msrp, fill = msrp)) + 
+  geom_bar(stat = "identity", position = position_dodge(preserve = "single")) +
+  theme_gray() +
+  theme(legend.position = "none", axis.text.y=element_blank())+
+  ylab("Manufacturer Suggested Retail Price (MSRP) \n")+
+  xlab("Cars Models") +
+  labs(fill = "") +
+  geom_text(aes(label = dollar(msrp)), position = position_dodge(width = 0.9), hjust = 1.1, angle = 90,
+            color='white', size = 4) 
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+gt_table <- gtcars2 %>%
+  dplyr::select(model, mpg_c, mpg_h, msrp) 
+
+
+gt(gt_table) %>%
+  fmt_currency(columns = vars(msrp), currency = "USD", decimals = 0) %>%
+  cols_label(
+    mpg_c = "MPG City",
+    mpg_h = "MPG HWY",
+    msrp = "MSRP")
+
+```
