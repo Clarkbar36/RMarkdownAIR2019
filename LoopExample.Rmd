@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(gt)
 library(scales)
+library(dplyr)
 #install these packages if they don't exist in your R Studio IDE
 
 car_loops <- gtcars[gtcars$ctry_origin == car_loop,]
